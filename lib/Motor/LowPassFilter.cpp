@@ -1,11 +1,10 @@
 
 #include "LowPassFilter.hpp"
 
-int lowPassFilter(const int target)
+int LowPassFilter::lowPassFilter(float target)
 {
-    constexpr float alpha = 0.01;
     float value = (alpha * target) + ((1 - alpha) * prevValue);
-    float prevValue = value;
+    prevValue = value;
 
     return value;
 }

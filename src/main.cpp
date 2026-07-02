@@ -1,4 +1,7 @@
 #include <Arduino.h>
+#include "LowPassFilter.hpp"
+#include "../lib/Motor/LowPassFilter.hpp"
+
 void setup() {
     pinMode(13, OUTPUT);
     pinMode(14, OUTPUT);
@@ -23,6 +26,10 @@ void setup() {
 
     analogWrite(16, 0);
     analogWrite(17, 0);
+
+    LowPassFilter lpf;
+
+    Serial.println(lpf.lowPassFilter(100.0));
 }
 
 void loop() {

@@ -6,9 +6,11 @@
 class LowPassFilter
 {
 public:
-    int lowPassFilter(int target);
+    int lowPassFilter(float target);
+
+private:
+    float alpha = 0.01;
     float prevValue = 0;
-    float value = 0;
 };
 
 
