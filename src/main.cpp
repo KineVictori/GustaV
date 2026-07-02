@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include "LowPassFilter.hpp"
 #include "../lib/Motor/LowPassFilter.hpp"
 
 void setup() {
