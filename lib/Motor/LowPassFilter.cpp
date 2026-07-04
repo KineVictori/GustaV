@@ -3,8 +3,8 @@
 
 int LowPassFilter::update(float target)
 {
-    float currValue = (alpha * target) + ((1 - alpha) * prevValue);
-    prevValue = currValue;
+    float currValue = (_alpha * target) + ((1 - _alpha) * _prevValue);
+    _prevValue = currValue;
 
     return currValue;
 }
