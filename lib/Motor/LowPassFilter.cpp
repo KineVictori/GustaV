@@ -1,10 +1,13 @@
 
 #include "LowPassFilter.hpp"
 
-int LowPassFilter::lowPassFilter(float target)
+int LowPassFilter::update(float target)
 {
-    float value = (alpha * target) + ((1 - alpha) * prevValue);
-    prevValue = value;
+    float currValue = (alpha * target) + ((1 - alpha) * prevValue);
+    prevValue = currValue;
 
-    return value;
+    return currValue;
 }
+
+
+

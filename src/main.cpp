@@ -1,17 +1,29 @@
 #include <Arduino.h>
 #include "../lib/Motor/LowPassFilter.hpp"
 
+int motor0LA = 13;
+int motor0LB = 14;
+
+int motor0RA = 22;
+int motor0RB = 27;
+
+int motor1LA = 18;
+int motor1LB = 21;
+
+int motor1RA = 16;
+int motor1RB = 17;
+
 void setup() {
-    pinMode(13, OUTPUT);
-    pinMode(14, OUTPUT);
-    pinMode(22, OUTPUT);
-    pinMode(27, OUTPUT);
+    pinMode(motor0LA, OUTPUT);
+    pinMode(motor0LB, OUTPUT);
+    pinMode(motor0RA, OUTPUT);
+    pinMode(motor0RB, OUTPUT);
 
-    pinMode(18, OUTPUT);
-    pinMode(21, OUTPUT);
+    pinMode(motor1LA, OUTPUT);
+    pinMode(motor1LB, OUTPUT);
 
-    pinMode(16, OUTPUT);
-    pinMode(17, OUTPUT);
+    pinMode(motor1RA, OUTPUT);
+    pinMode(motor1RB, OUTPUT);
 
     pinMode(2, OUTPUT);
 
@@ -26,37 +38,52 @@ void setup() {
     analogWrite(16, 0);
     analogWrite(17, 0);
 
-    LowPassFilter lpf;
+    Serial.begin(9600);
+    Serial.println("Hello World!");
+}
 
-    Serial.println(lpf.lowPassFilter(100.0));
+LowPassFilter lpf;
+LowPassFilter lpf1;
+
+void setMotor(float voltage)
+{
+    // clamp
+    if (voltage < -255) { voltage = -255; }
+    else if (voltage > 255) { voltage = 255; }
+
+    // hvis problem med float target, gjør om voltage til int her
+
+    if (voltage > 0)
+    {
+        analogWrite(16, voltage);
+        analogWrite(17, 0);
+    }
+    else
+    {
+        analogWrite(16, 0);
+        analogWrite(17, abs(voltage));
+    }
 }
 
 void loop() {
-    //digitalWrite(13, HIGH);
-    //digitalWrite(14, LOW);
-    analogWrite(13, 0);
-    analogWrite(14, 0);
-    analogWrite(22, 0);
-    analogWrite(27, 0);
-    analogWrite(18, 0);
-    analogWrite(21, 0);
-    analogWrite(16, 0);
-    analogWrite(17, 127);
-    digitalWrite(2, LOW);
 
-    delay(1000);
+    float target = 127.0;
+    float currValue = lpf.update(target);
+    while (target != currValue)
+    {
+        setMotor(currValue);
+        currValue = lpf.update(target);
+        delay(23);
+    }
 
-    //digitalWrite(13, LOW);
-    //digitalWrite(14, HIGH);
-    analogWrite(13, 0);
-    analogWrite(14, 0);
-    analogWrite(22, 0);
-    analogWrite(27, 0);
-    analogWrite(18, 0);
-    analogWrite(21, 0);
-    analogWrite(16, 127);
-    analogWrite(17, 0);
-    digitalWrite(2, HIGH);
 
-    delay(1000);
+    target = -127.0;
+    currValue = lpf.update(target);
+    while (target != currValue)
+    {
+        setMotor(currValue);
+        currValue = lpf.update(target);
+        delay(23);
+    }
+
 }

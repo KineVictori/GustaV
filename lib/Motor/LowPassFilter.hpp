@@ -1,17 +1,12 @@
 
-#ifndef GUSTAV_LOWPASSFILTER_HPP
-#define GUSTAV_LOWPASSFILTER_HPP
-
+#pragma once
 
 class LowPassFilter
 {
 public:
-    int lowPassFilter(float target);
+    int update(float target);
 
 private:
     float alpha = 0.01;
-    float prevValue = 0;
+    float prevValue = 0.0;
 };
-
-
-#endif //GUSTAV_LOWPASSFILTER_HPP
